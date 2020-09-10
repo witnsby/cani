@@ -1,15 +1,19 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+	"os/user"
+	"strings"
 	"time"
 )
 
-const UrlForCheck = "http://ifconfig.io/"
+const (
+	UrlForCheck = "http://ifconfig.io/"
+)
+
 
 type listData map[string]string
 
@@ -48,26 +52,47 @@ func requestData(s string) string {
 		}
 	}()
 
-	return string(bites)
+	return strings.TrimRight(string(bites), "\r\n")
 }
 
 // func setMyEnvVariables should create local environment variables in the OS
-func (l listData) setMyEnvVariables() {
-	for key, value := range l {
-		err := os.Setenv(key,value)
-		if err != nil {
-			log.Fatal(err)
-		}
+//func (l listData) setMyEnvVariables() {
+//	for key, value := range l {
+//		err := os.Setenv(key,value)
+//		if err != nil {
+//			log.Fatal(err)
+//		}
+//	}
+//}
+
+func (l listData) generateMyJson() {
+	data, err := json.Marshal(l)
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
+
+	createConfigFile(data)
 }
 
-// func getMyEnvVariables is a testing func
-func (l listData) getMyEnvVariables() {
-	for key := range l {
-		fmt.Println(os.Getenv(key))
+// func getCurrentUserHomeDir get information about current user homeDir
+func getCurrentUserHomeDir() string {
+	user, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
 	}
+	return user.HomeDir
 }
 
+// func createConfigFile creates json file
+func createConfigFile(data []byte) {
+
+	homeDir := getCurrentUserHomeDir()
+
+	if err := ioutil.WriteFile(homeDir + "/" + "cani.json", data, 0644); err != nil {
+		log.Fatal(err)
+	}
+}
 
 func main() {
 
@@ -76,8 +101,9 @@ func main() {
 	for {
 		listData.putDefaultParameters()
 		listData.putCertainParameters()
-		listData.setMyEnvVariables()
+		//listData.setMyEnvVariables()
+		listData.generateMyJson()
 		time.Sleep(5 * time.Second)
-		//listData.getMyEnvVariables()
+
 	}
 }
