@@ -66,7 +66,7 @@ func requestData(s string) string {
 func (l listData) generateMyJson() {
 	data, err := json.Marshal(l)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
 
@@ -77,7 +77,7 @@ func (l listData) generateMyJson() {
 func getCurrentUserHomeDir() string {
 	user, err := user.Current()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	return user.HomeDir
 }
@@ -87,7 +87,7 @@ func createConfigFile(data []byte) {
 	homeDir := getCurrentUserHomeDir()
 
 	if err := ioutil.WriteFile(homeDir + "/" + "cani.json", data, 0644); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
