@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -35,14 +36,21 @@ func (l listData) putCertainParameters() {
 
 // func requestData should return actual information like IP, Country
 func requestData(s string) string {
-	resp, err := http.Get(UrlForCheck + s)
+
+	client := http.Client{
+		Timeout: 2 * time.Second,
+	}
+
+	resp, err := client.Get(UrlForCheck + s)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return ""
 	}
 
 	bites, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return ""
 	}
 
 	defer func() {
@@ -54,16 +62,6 @@ func requestData(s string) string {
 
 	return strings.TrimRight(string(bites), "\r\n")
 }
-
-// func setMyEnvVariables should create local environment variables in the OS
-//func (l listData) setMyEnvVariables() {
-//	for key, value := range l {
-//		err := os.Setenv(key,value)
-//		if err != nil {
-//			log.Fatal(err)
-//		}
-//	}
-//}
 
 func (l listData) generateMyJson() {
 	data, err := json.Marshal(l)
@@ -86,7 +84,6 @@ func getCurrentUserHomeDir() string {
 
 // func createConfigFile creates json file
 func createConfigFile(data []byte) {
-
 	homeDir := getCurrentUserHomeDir()
 
 	if err := ioutil.WriteFile(homeDir + "/" + "cani.json", data, 0644); err != nil {
@@ -95,15 +92,12 @@ func createConfigFile(data []byte) {
 }
 
 func main() {
-
 	listData := make(listData)
 
 	for {
 		listData.putDefaultParameters()
 		listData.putCertainParameters()
-		//listData.setMyEnvVariables()
 		listData.generateMyJson()
-		time.Sleep(5 * time.Second)
-
+		time.Sleep(2 * time.Second)
 	}
 }
