@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -15,12 +14,11 @@ const (
 	UrlForCheck = "http://ifconfig.io/"
 )
 
-
 type listData map[string]string
 
 // func putDefaultParameters is a list with data which should be requested
 func (l listData) putDefaultParameters() {
-	myList := [2]string{"country_code","ip"}
+	myList := [2]string{"country_code", "ip"}
 
 	for _, elem := range myList {
 		l[elem] = "nil"
@@ -43,13 +41,13 @@ func requestData(s string) string {
 
 	resp, err := client.Get(UrlForCheck + s)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%v", err)
 		return ""
 	}
 
 	bites, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%v", err)
 		return ""
 	}
 
@@ -66,7 +64,7 @@ func requestData(s string) string {
 func (l listData) generateMyJson() {
 	data, err := json.Marshal(l)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%v", err)
 		return
 	}
 
@@ -77,7 +75,7 @@ func (l listData) generateMyJson() {
 func getCurrentUserHomeDir() string {
 	user, err := user.Current()
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%v", err)
 	}
 	return user.HomeDir
 }
@@ -86,8 +84,8 @@ func getCurrentUserHomeDir() string {
 func createConfigFile(data []byte) {
 	homeDir := getCurrentUserHomeDir()
 
-	if err := ioutil.WriteFile(homeDir + "/" + "cani.json", data, 0644); err != nil {
-		fmt.Println(err)
+	if err := ioutil.WriteFile(homeDir+"/"+"cani.json", data, 0644); err != nil {
+		log.Printf("%v", err)
 	}
 }
 
