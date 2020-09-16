@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -41,13 +42,13 @@ func requestData(s string) string {
 
 	resp, err := client.Get(UrlForCheck + s)
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		return ""
 	}
 
 	bites, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		return ""
 	}
 
@@ -64,20 +65,19 @@ func requestData(s string) string {
 func (l listData) generateMyJson() {
 	data, err := json.Marshal(l)
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		return
 	}
-
 	createConfigFile(data)
 }
 
 // func getCurrentUserHomeDir get information about current user homeDir
 func getCurrentUserHomeDir() string {
-	user, err := user.Current()
+	userName, err := user.Current()
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 	}
-	return user.HomeDir
+	return userName.HomeDir
 }
 
 // func createConfigFile creates json file
@@ -85,7 +85,7 @@ func createConfigFile(data []byte) {
 	homeDir := getCurrentUserHomeDir()
 
 	if err := ioutil.WriteFile(homeDir+"/"+"cani.json", data, 0644); err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 	}
 }
 
