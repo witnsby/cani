@@ -77,7 +77,7 @@ func getCurrentUserHomeDir() string {
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
-	return userName.HomeDir
+	return userName.HomeDir§
 }
 
 // func createConfigFile creates json file
