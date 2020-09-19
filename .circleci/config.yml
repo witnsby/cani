@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    environment:
+      IMAGE_NAME: cani
     docker:
       - image: docker:18.06.1-ce-git
     steps:
