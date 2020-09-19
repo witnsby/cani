@@ -37,7 +37,7 @@ jobs:
           name: Build Image
           command: |
             IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
-            docker build -t $IMAGE_NAME:$IMAGE_TAG .
+            docker build -t $IMAGE_NAME .
             docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
       - run:
           name: Push to ECR
