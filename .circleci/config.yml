@@ -13,7 +13,7 @@ jobs:
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/
+            - cani
       - store_artifacts:
           path: cani
   build_docker_image:
