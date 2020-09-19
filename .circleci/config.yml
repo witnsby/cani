@@ -50,7 +50,8 @@ jobs:
             docker tag $IMAGE_NAME:latest ${ECR_IMAGE}
             docker tag $IMAGE_NAME:latest ${ECR_IMAGE}:$VERSION
             docker push ${ECR_IMAGE}:latest
-            docker push ${ECR_IMAGE}:$VERSION
+            # docker push ${ECR_IMAGE}:$VERSION
+            docker push ${ECR_IMAGE}:ver-000
 workflows:
   version: 2
   build_and_deploy:
