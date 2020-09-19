@@ -58,4 +58,3 @@ workflows:
       - build_docker_image:
           requires:
             - build_app
-      - push_to_ecr
