@@ -17,7 +17,7 @@ jobs:
             - cani
       - store_artifacts:
           path: cani
-  build_docker_image:
+  build_push_docker_image:
     working_directory: /tmp/app/
     environment:
       IMAGE_NAME: cani
@@ -47,13 +47,14 @@ jobs:
             ECR_IMAGE="${REPO}/${IMAGE_NAME}"
             aws ecr get-login-password --region=${REGION} | docker login --username AWS --password-stdin ${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}
             docker tag $IMAGE_NAME:latest ${ECR_IMAGE}
+            docker tag $IMAGE_NAME:latest ${ECR_IMAGE}:${IMAGE_TAG}
             docker push ${ECR_IMAGE}:latest
-            docker push ${ECR_IMAGE}:IMAGE_TAG
+            docker push ${ECR_IMAGE}:${IMAGE_TAG}
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build_app
-      - build_docker_image:
+      - build_push_docker_image:
           requires:
             - build_app
