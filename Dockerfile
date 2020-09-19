@@ -5,6 +5,6 @@ WORKDIR /opt/
 
 COPY src/ .
 
-RUN chmod +x main
+RUN chmod +x cani
 
-CMD ["/bin/sh", "-c", "./main"]
+CMD ["/bin/sh", "-c", "./cani"]
