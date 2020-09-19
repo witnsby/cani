@@ -25,6 +25,7 @@ jobs:
       - run:
           name: Build Image
           command: |
+            ls -lah
             IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
             docker build -t $IMAGE_NAME:$IMAGE_TAG Dockerfile
             docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
