@@ -18,6 +18,7 @@ jobs:
       - store_artifacts:
           path: cani
   build_docker_image:
+    working_directory: /tmp/app/
     environment:
       IMAGE_NAME: cani
     docker:
