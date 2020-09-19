@@ -15,15 +15,24 @@ jobs:
   build_docker_image:
     environment:
       IMAGE_NAME: cani
+      VCS-TYPE: github
+      USERNAME:
     docker:
       - image: docker:18.06.1-ce-git
     steps:
+      - checkout
       - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
             apk add py-pip
             pip install awscli
+      - run:
+          name: Get Artifact
+          command: |
+            curl -H "Circle-Token: $CIRCLE_TOKEN" https://circleci.com/api/v1.1/project/${VCS-TYPE}/${CIRCLE_USERNAME}/${CIRCLE_PROJECT_REPONAME}/latest/artifacts
+            pwd
+            ls -alh
       - run:
           name: Build Image
           command: |
