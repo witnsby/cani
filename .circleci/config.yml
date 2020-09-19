@@ -8,8 +8,8 @@ jobs:
       - run:
           name: build_app
           command: |
-            GOOS=linux go build ./scr/main.go
-            mv ./scr/main ./scr/cani
+            GOOS=linux go build ~/project/scr/main.go
+            mv ~/project/scr/main ~/project/scr/cani
   build_docker_image:
     environment:
       IMAGE_NAME: cani
