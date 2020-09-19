@@ -43,10 +43,10 @@ jobs:
           name: Push to ECR
           command: |
             REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
-            IMAGE="${image:-$REPO/${IMAGE_NAME}}"
+            IMAGE="${image:-${REPO}/${IMAGE_NAME}}"
             ECR_IMAGE="${REPO}/${IMAGE_NAME}"
             aws ecr get-login-password --region=${REGION} | docker login --username AWS --password-stdin ${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}
-            build -t $IMAGE_NAME:$IMAGE_TAG -t $ECR_IMAGE:$IMAGE_TAG
+            build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${ECR_IMAGE}:${IMAGE_TAG}
             docker push ${ECR_IMAGE}:latest
             docker push $IMAGE:latest
 workflows:
