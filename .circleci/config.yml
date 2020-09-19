@@ -39,6 +39,17 @@ jobs:
             IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
             docker build -t $IMAGE_NAME:$IMAGE_TAG .
             docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
+      - run:
+          name: Push to ECR
+          command: |
+            REPO=${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com
+            IMAGE="${image:-$REPO/${CIRCLE_BUILD_NUM}}"
+            ECR_IMAGE="${REPO}/${IMAGE_NAME}"
+            aws ecr get-login-password --region=${REGION} | docker login --username AWS --password-stdin ${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}
+            docker push ${ECR_IMAGE}:${CIRCLE_BUILD_NUM}
+            docker push ${ECR_IMAGE}:latest
+            docker push $IMAGE:${CIRCLE_BUILD_NUM}
+            docker push $IMAGE:latest
 workflows:
   version: 2
   build_and_deploy:
@@ -47,3 +58,4 @@ workflows:
       - build_docker_image:
           requires:
             - build_app
+      - push_to_ecr
