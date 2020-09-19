@@ -2,10 +2,9 @@ version: 2
 jobs:
   build_app:
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.15
     steps:
       - checkout
-      - make_go_build
       - run:
           name: build_app
           command: |
