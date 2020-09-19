@@ -8,6 +8,7 @@ jobs:
       - run:
           name: build_app
           command: |
+            ls -lah
             GOOS=linux go build ~/project/scr/main.go
             mv ~/project/scr/main ~/project/scr/cani
   build_docker_image:
