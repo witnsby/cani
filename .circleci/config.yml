@@ -10,17 +10,21 @@ jobs:
           command: |
             GOOS=linux go build ./src/main.go
             mv main cani
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
       - store_artifacts:
           path: cani
   build_docker_image:
     environment:
       IMAGE_NAME: cani
-      VCS-TYPE: github
-      USERNAME:
     docker:
       - image: docker:18.06.1-ce-git
     steps:
       - checkout
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - setup_remote_docker
       - run:
           name: Install dependencies
@@ -28,15 +32,10 @@ jobs:
             apk add py-pip
             pip install awscli
       - run:
-          name: Get Artifact
-          command: |
-            curl -H "Circle-Token: $CIRCLE_TOKEN" https://circleci.com/api/v1.1/project/${VCS-TYPE}/${CIRCLE_USERNAME}/${CIRCLE_PROJECT_REPONAME}/latest/artifacts
-            pwd
-            ls -alh
-      - run:
           name: Build Image
           command: |
-            ls -lah
+            ls -lahR
+            pwd
             # IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
             # docker build -t $IMAGE_NAME:$IMAGE_TAG Dockerfile
             # docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
