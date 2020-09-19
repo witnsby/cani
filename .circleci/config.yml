@@ -1,6 +1,7 @@
-version: 2
+version: 2.1
 jobs:
   build_app:
+    working_directory: /app/
     docker:
       - image: circleci/golang:1.15
     steps:
