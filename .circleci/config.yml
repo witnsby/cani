@@ -9,7 +9,7 @@ jobs:
           name: build_app
           command: |
             GOOS=linux go build ${CIRCLE_WORKING_DIRECTORY}/src/main.go
-            mv ${CIRCLE_WORKING_DIRECTORY}/src/main ${CIRCLE_WORKING_DIRECTORY}/src/cani
+            mv ${CIRCLE_WORKING_DIRECTORY}/main ${CIRCLE_WORKING_DIRECTORY}/cani
   build_docker_image:
     environment:
       IMAGE_NAME: cani
