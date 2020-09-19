@@ -38,7 +38,6 @@ jobs:
           command: |
             IMAGE_TAG="${CIRCLE_BUILD_NUM}"
             docker build -t $IMAGE_NAME .
-            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
       - run:
           name: Push to ECR
           command: |
@@ -49,10 +48,10 @@ jobs:
             aws ecr get-login-password --region=${REGION} | docker login --username AWS --password-stdin ${ACCOUNTID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}
             docker tag $IMAGE_NAME:latest ${ECR_IMAGE}
             docker tag $IMAGE_NAME:latest ${ECR_IMAGE}:${SHA1_VERSION}
-            docker tag $IMAGE_NAME:latest ${ECR_IMAGE}:${CIRCLE_BUILD_NUM}
+            docker tag $IMAGE_NAME:latest ${ECR_IMAGE}:ver-${CIRCLE_BUILD_NUM}
             docker push ${ECR_IMAGE}:latest
             docker push ${ECR_IMAGE}:${SHA1_VERSION}
-            docker push ${ECR_IMAGE}:${CIRCLE_BUILD_NUM}
+            docker push ${ECR_IMAGE}:ver-${CIRCLE_BUILD_NUM}
 workflows:
   version: 2
   build_and_deploy:
