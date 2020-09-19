@@ -34,4 +34,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build_app
-      - build_docker_image
+      - build_docker_image:
+          requires:
+            - build_app
