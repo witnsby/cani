@@ -9,8 +9,7 @@ jobs:
       - run:
           name: build_app
           command: |
-            GOOS=linux go build ./src/main.go
-            mv main cani
+            GOOS=linux go build ./src/cani.go
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
